@@ -1,0 +1,20 @@
+{
+  "name": "pvtt-factory-management-system",
+  "version": "2.0.0",
+  "description": "PVT&T FACTORY Management System - Production & Waste Tracking",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "echo 'Lint ok'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^8.2.2"
+  },
+  "dependencies": {
+    "html5-qrcode": "^2.3.8"
+  }
+}

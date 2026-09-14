@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <!-- ======================================================
+      QR SUCCESS PAGE
+      EA Factory
+      ------------------------------------------------------
+      ใช้หลังจากบันทึกข้อมูลจากหน้า form-department สำเร็จ
+      โดยเฉพาะกรณีเข้าผ่าน QR
+    ======================================================= -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>บันทึกสำเร็จ | PVT&T FACTORY</title>
+<!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/Logo_Apps3.png?v=3" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/Logo_Apps3.png?v=3" />
+    <link rel="apple-touch-icon" href="/icons/Logo_Apps3.png" />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#1E3A8A" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&family=Kanit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Material Symbols Outlined -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary: #1E3A8A;
+        --primary-dark: #0F2847;
+        --ea-blue: #0284c7;
+        --ea-orange: #ea580c;
+        --success: #10b981;
+        --body-bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 20px;
+        font-family: "Kanit", "Noto Sans Thai", sans-serif;
+        background:
+          radial-gradient(
+            circle at top left,
+            rgba(30, 58, 138, 0.12),
+            transparent 34%
+          ),
+          radial-gradient(
+            circle at bottom right,
+            rgba(234, 88, 12, 0.10),
+            transparent 34%
+          ),
+          var(--body-bg);
+        color: var(--text-main);
+      }
+
+      .success-card {
+        width: min(460px, 100%);
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 28px;
+        padding: 32px 28px;
+        text-align: center;
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.10);
+      }
+
+      .brand-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 14px;
+        margin-bottom: 20px;
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      }
+
+      .brand-badge img {
+        height: 38px;
+        width: auto;
+        object-fit: contain;
+      }
+
+      .success-icon {
+        width: 76px;
+        height: 76px;
+        display: grid;
+        place-items: center;
+        margin: 0 auto 16px;
+        border-radius: 24px;
+        background: #ecfdf5;
+        color: var(--success);
+        font-size: 40px;
+        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.15);
+      }
+
+      .material-symbols-outlined {
+        font-family: "Material Symbols Outlined";
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 700,
+          "GRAD" 0,
+          "opsz" 48;
+        font-size: 52px;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: clamp(22px, 5vw, 26px);
+        font-weight: 800;
+        line-height: 1.25;
+      }
+
+      p {
+        margin: 0 0 24px;
+        color: var(--text-muted);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .actions {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .btn {
+        border: 1px solid transparent;
+        border-radius: 14px;
+        padding: 12px 20px;
+        min-height: 48px;
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        letter-spacing: 0.01em;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .btn-primary {
+        width: min(100%, 260px);
+        padding: 16px 20px;
+        font-size: 18px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #0284c7 0%, #1E3A8A 100%);
+        color: #ffffff;
+        box-shadow: 0 12px 28px rgba(2, 132, 199, 0.28);
+        border-radius: 18px;
+      }
+
+      .btn-primary:hover {
+        background: linear-gradient(135deg, #0369a1 0%, #0F2847 100%);
+        box-shadow: 0 14px 32px rgba(2, 132, 199, 0.35);
+      }
+
+      .btn-secondary {
+        width: min(100%, 220px);
+        background: #f8fafc;
+        color: var(--text-main);
+        border-color: #cbd5e1;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+      }
+
+      .btn-secondary:hover {
+        background: #f1f5f9;
+      }
+
+      .hint {
+        display: block;
+        margin-top: 18px;
+        color: var(--text-muted);
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      #qr-reader {
+        overflow: hidden;
+        border-radius: 20px;
+        border: 2px solid #cbd5e1;
+        background: #0f172a;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="success-card">
+      <div class="brand-badge">
+        <img src="/icons/Logo_Apps3.png?v=3" alt="PVT&T FACTORY Logo" />
+      </div>
+
+      <div class="success-icon">✓</div>
+
+      <h1>บันทึกข้อมูลสำเร็จ</h1>
+
+      <p>
+        หากต้องกรอกข้อมูลเครื่องถัดไป ให้กดปุ่มสแกน QR ใหม่ หรือกลับหน้า Login
+        เพื่อเข้าใช้งานตามปกติ
+      </p>
+
+      <div class="actions">
+        <button class="btn btn-primary" type="button" onclick="scanAgain()">
+          <span class="material-symbols-outlined" style="font-size: 26px;">qr_code_scanner</span>
+          <span>สแกน QR</span>
+        </button>
+
+        <button class="btn btn-secondary" type="button" onclick="goLogin()">
+          กลับหน้า Login
+        </button>
+      </div>
+
+      <small class="hint">
+        หากไม่มีการกดปุ่มภายใน 5 นาที ระบบจะกลับหน้า Login อัตโนมัติ
+      </small>
+    </main>
+
+    <!-- <script>
+      const IDLE_LIMIT = 5 * 60 * 1000;
+
+      function clearQrSession() {
+        localStorage.removeItem("activeUser");
+        localStorage.removeItem("activeName");
+        localStorage.removeItem("activeRole");
+        localStorage.removeItem("activeUserId");
+        localStorage.removeItem("activeDept");
+      }
+
+      function scanAgain() {
+        clearQrSession();
+
+        // กลับหน้า Login เพื่อให้เครื่องพร้อมรับการสแกน QR ใหม่
+        window.location.href = "/login.html";
+      }
+
+      function goLogin() {
+        clearQrSession();
+        window.location.href = "/login.html";
+      }
+
+      setTimeout(() => {
+        goLogin();
+      }, IDLE_LIMIT);
+    </script> -->
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
+    <script>
+      const IDLE_LIMIT = 5 * 60 * 1000;
+      let qrScanner = null;
+      let idleTimer = null;
+
+      function clearQrSession() {
+        localStorage.removeItem("activeUser");
+        localStorage.removeItem("activeName");
+        localStorage.removeItem("activeRole");
+        localStorage.removeItem("activeUserId");
+        localStorage.removeItem("activeDept");
+      }
+
+      function scanAgain() {
+        clearQrSession();
+        resetIdleTimer();
+
+        const card = document.querySelector(".success-card");
+
+        card.innerHTML = `
+          <h1>สแกน QR เครื่องถัดไป</h1>
+          <p>กรุณาอนุญาตให้ระบบเปิดกล้อง แล้วสแกน QR ที่เครื่องจักร</p>
+
+          <div id="qr-reader" style="width:100%; margin-top:18px;"></div>
+
+          <button class="btn btn-secondary" type="button" onclick="goLogin()" style="margin-top:16px;">
+            กลับหน้า Login
+          </button>
+        `;
+
+        qrScanner = new Html5Qrcode("qr-reader");
+
+        qrScanner
+          .start(
+            { facingMode: "environment" },
+            {
+              fps: 10,
+              qrbox: {
+                width: 250,
+                height: 250,
+              },
+            },
+            async (decodedText) => {
+              try {
+                if (qrScanner) {
+                  await qrScanner.stop();
+                }
+              } catch (err) {
+                console.warn(err);
+              }
+
+              handleQrResult(decodedText);
+            },
+            () => {},
+          )
+          .catch((err) => {
+            console.warn("Camera start failed in qr-success.html, showing fallback:", err);
+            const qrReader = document.getElementById("qr-reader");
+            if (qrReader) {
+              qrReader.innerHTML = `
+                <div style="padding: 20px 14px; text-align: center; color: #f1f5f9; background: #1e293b; border-radius: 12px; display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 12px;">
+                  <span class="material-symbols-outlined" style="font-size: 40px; color: #94a3b8;">no_photography</span>
+                  <div style="font-size: 14px; font-weight: 600; color: #e2e8f0;">ไม่สามารถเข้าถึงกล้องถ่ายภาพได้</div>
+                  <p style="font-size: 12px; color: #94a3b8; margin: 0; line-height: 1.4;">อุปกรณ์นี้ไม่มีกล้อง หรือเบราว์เซอร์ไม่ได้รับสิทธิ์ คุณสามารถอัปโหลดรูปภาพรหัส QR เพื่อทำการสแกนแทนได้</p>
+                  
+                  <button type="button" id="btn-upload-qr-success-fallback" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; padding: 10px 14px; border-radius: 8px; width: 100%; justify-content: center; font-weight: 600; background: #3b82f6; border: none; color: white; cursor: pointer;">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">upload_file</span>
+                    อัปโหลดรูปภาพ QR
+                  </button>
+                  <input type="file" id="qr-success-file-input-fallback" accept="image/*" style="display: none;" />
+                </div>
+              `;
+
+              const uploadBtn = document.getElementById("btn-upload-qr-success-fallback");
+              const fileInput = document.getElementById("qr-success-file-input-fallback");
+
+              if (uploadBtn && fileInput) {
+                uploadBtn.addEventListener("click", () => fileInput.click());
+                fileInput.addEventListener("change", (e) => {
+                  const file = e.target.files[0];
+                  if (!file) return;
+
+                  const fileReaderQr = new Html5Qrcode("qr-reader");
+                  fileReaderQr.scanFile(file, true)
+                    .then((decodedText) => {
+                      handleQrResult(decodedText);
+                    })
+                    .catch((scanErr) => {
+                      console.warn("Scan success file error:", scanErr);
+                      alert("ไม่สามารถตรวจพบรหัส QR ในภาพที่อัปโหลดได้ กรุณาลองด้วยภาพอื่นค่ะ");
+                    });
+                });
+              }
+            }
+          });
+      }
+
+      function handleQrResult(decodedText) {
+        const text = String(decodedText || "").trim();
+
+        if (!text) {
+          alert("อ่าน QR ไม่สำเร็จ กรุณาสแกนใหม่");
+          return;
+        }
+
+        // ถ้า QR เป็นลิงก์เต็ม
+        if (text.includes("form-department.html")) {
+          window.location.href = text;
+          return;
+        }
+
+        // ถ้า QR เป็น path เช่น /pages/form-department.html?dept=BLOW
+        if (text.startsWith("/pages/")) {
+          window.location.href = text;
+          return;
+        }
+
+        // ถ้า QR เป็นแค่รหัสแผนก เช่น BLOW
+        window.location.href =
+          "/pages/form-department.html?dept=" + encodeURIComponent(text);
+      }
+
+      function goLogin() {
+        clearQrSession();
+
+        if (qrScanner) {
+          qrScanner.stop().catch(() => {});
+        }
+
+        window.location.href = "/login.html";
+      }
+
+      function resetIdleTimer() {
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+          goLogin();
+        }, IDLE_LIMIT);
+      }
+
+      ["click", "touchstart", "keydown"].forEach((eventName) => {
+        document.addEventListener(eventName, resetIdleTimer, true);
+      });
+
+      resetIdleTimer();
+    </script>
+  </body>
+</html>

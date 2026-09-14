@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ตรวจสอบข้อมูลรายวัน | PVT&T FACTORY</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&family=Kanit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+
+<!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/Logo_Apps3.png?v=3" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/Logo_Apps3.png?v=3" />
+    <link rel="apple-touch-icon" href="/icons/Logo_Apps3.png" />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#1E3A8A" />
+    <!-- ใช้หัว/ธีมเดิม -->
+    <link rel="stylesheet" href="/css/loadingService.css" />
+    <link rel="stylesheet" href="/css/supervisor-daily-review.css" />
+    <!-- CSS เสริมเฉพาะตาราง Go Live -->
+    <link rel="stylesheet" href="/css/supervisor-daily-review-table-addon.css" />
+  </head>
+
+  <body>
+    <main class="page">
+      <!-- HEADER: 2-Column Layout -->
+      <header class="page-header supervisor-hero">
+        <div class="header-col-left">
+          <div class="header-brand">
+            <div class="header-logo" aria-hidden="true">
+              <img src="/icons/Logo_Apps3.png?v=3" alt="PVT&T FACTORY Logo" width="64" height="64" style="width: 64px; height: 64px; max-width: 64px; max-height: 64px; object-fit: contain;" />
+            </div>
+
+            <div class="header-copy">
+              <span class="header-kicker">SUPERVISOR DAILY REVIEW</span>
+              <h1>ตรวจสอบข้อมูลรายวัน</h1>
+              <p>ตรวจสอบข้อมูลของเสียก่อนส่งเข้าฐานข้อมูล</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="header-col-right">
+          <div class="header-actions">
+            <a href="/pages/supervisor-dashboard.html" class="btn primary">
+              <span class="material-symbols-outlined">dashboard</span>
+              <span>Dashboard</span>
+            </a>
+            <button class="btn secondary" type="button" onclick="loadRecords()">
+              <span class="material-symbols-outlined">refresh</span>
+              <span>รีเฟรช</span>
+            </button>
+            <button class="btn danger" type="button" onclick="logoutNow()">
+              <span class="material-symbols-outlined">logout</span>
+              <span>ออกระบบ</span>
+            </button>
+          </div>
+
+          <div class="user-info-card">
+            <div class="user-avatar">
+              <span class="material-symbols-outlined">person</span>
+            </div>
+
+            <div class="user-copy">
+              <span class="user-label">ผู้ตรวจสอบข้อมูล</span>
+              <strong id="userName">-</strong>
+              <div id="userDept">-</div>
+            </div>
+
+            <div class="review-ready" aria-label="สถานะพร้อมตรวจสอบ">
+              <span class="ready-dot"></span>
+              <span>พร้อมตรวจสอบ</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- FILTER เดิม -->
+      <section class="filter-card">
+        <div class="form-group">
+          <label for="filterDate">วันที่</label>
+          <input type="date" id="filterDate" />
+        </div>
+        <div class="form-group">
+          <label for="filterStatus">สถานะ</label>
+          <select id="filterStatus">
+            <option value="all">ทั้งหมด</option>
+            <option value="pending_supervisor">รอตรวจสอบ</option>
+            <option value="sent_accounting">บันทึกลงระบบแล้ว</option>
+            <option value="accounting_checked">ผ่านการตรวจสอบแล้ว</option>
+          </select>
+        </div>
+        <button class="btn primary" type="button" onclick="loadRecords()">ค้นหา</button>
+      </section>
+
+      <!-- KPI เดิม -->
+      <section class="summary-grid summary-grid-3">
+        <div class="summary-card warning">
+          <span>รอตรวจสอบ</span>
+          <strong id="countPending">0</strong>
+          <small>กดตรวจแล้วจะหายจากรายการนี้</small>
+        </div>
+        <div class="summary-card success">
+          <span>จำนวนของเสียวันนี้ทั้งหมด</span>
+          <strong id="todayWaste">0 kg</strong>
+          <small>รวมทุกสถานะของวันที่เลือก</small>
+        </div>
+        <div class="summary-card danger">
+          <span>เครื่องที่เสียเยอะสุดวันนี้</span>
+          <strong id="topMachineToday">-</strong>
+          <small id="topMachineTodaySub">-</small>
+        </div>
+      </section>
+
+      <!-- CONTENT ใหม่: ตารางแทน Card / ไม่มีอัปโหลดรูป -->
+      <section class="table-card supervisor-table-card">
+        <div class="table-header">
+          <div>
+            <h2>รายการรายงานของเสีย</h2>
+            <p class="muted">ตรวจสอบข้อมูลก่อนส่งให้บัญชีดำเนินการต่อ</p>
+          </div>
+          <span id="rowCount" class="muted">-</span>
+        </div>
+
+        <div class="table-scroll supervisor-table-scroll">
+          <table class="data-table supervisor-data-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>วันที่/เวลา</th>
+                <th>แผนก</th>
+                <th>เครื่องจักร</th>
+                <th>ผู้บันทึก</th>
+                <th class="text-right">น้ำหนักของเสีย</th>
+                <th>รายการปัญหา</th>
+                <th>สถานะ</th>
+                <th>จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="reportBody">
+              <tr><td colspan="9" class="empty-cell">กำลังโหลดข้อมูล...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="table-card supervisor-table-card">
+        <div class="table-header">
+          <div>
+            <h2>รายการที่บันทึกลงระบบแล้ว</h2>
+            <p class="muted">ดูย้อนหลังเท่านั้น ไม่สามารถแก้ไขหรือลบได้</p>
+          </div>
+          <span id="sentRowCount" class="muted">-</span>
+        </div>
+
+        <div class="table-scroll supervisor-table-scroll">
+          <table class="data-table supervisor-data-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>วันที่/เวลา</th>
+                <th>แผนก</th>
+                <th>เครื่องจักร</th>
+                <th>ผู้บันทึก</th>
+                <th class="text-right">น้ำหนักของเสีย</th>
+                <th>รายการปัญหา</th>
+                <th>สถานะ</th>
+                <th>จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="sentReportBody">
+              <tr><td colspan="9" class="empty-cell">กำลังโหลดข้อมูล...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- Popup กลางระบบ แทน alert/confirm -->
+    <div id="appModal" class="modal-overlay app-modal" hidden>
+      <div class="modal-card app-modal-card">
+        <div class="modal-head">
+          <div>
+            <h2 id="modalTitle">แจ้งเตือน</h2>
+            <p id="modalSubTitle"></p>
+          </div>
+          <button type="button" class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div id="modalBody" class="app-modal-body"></div>
+        <div id="modalActions" class="modal-actions"></div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/core/supabaseClient.js"></script>
+    <script src="/core/activityLogger.js"></script>
+    <script src="/core/roleConfig.js"></script>
+    <script src="/core/ea-common.js"></script>
+    <script src="/core/departmentConfig.js"></script>
+    <script src="/core/tableSwipeDetector.js"></script>
+    <script src="/core/counterAnimation.js"></script>
+    <script src="/core/autoRefresh.js"></script>
+    <script src="/services/loadingService.js"></script>
+    <script src="/js/dashboard/supervisor-daily-review.js?v=old-header-table-v1"></script>
+  </body>
+</html>

@@ -1,0 +1,391 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap');
+
+/* ===================================================
+   🎨 CSS Variables (โครงสร้างระบบสีส่วนกลางรองรับ Dark Mode)
+   =================================================== */
+:root {
+    --bg-main: #e2e8f0;
+    --bg-content: #f1f5f9;
+    --bg-card: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --text-label: #334155;
+    --border-color: #cbd5e1;
+    --input-bg: #f8fafc;
+}
+
+body { 
+    font-family: 'Sarabun', sans-serif; 
+    background: var(--bg-main); 
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 🏢 โครงสร้างหน้าจอหลัก Layout */
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* 📑 แถบเมนูซ้ายมือ (Sidebar) */
+.sidebar {
+    width: 280px;
+    background: #1e3a8a; /* สีน้ำเงินเข้มหลัก */
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.sidebar-header {
+    padding: 25px 20px;
+    background: #1e3a8a;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.sidebar-header p {
+    margin: 5px 0 0 0;
+    font-size: 13px;
+    color: #93c5fd;
+}
+
+.sidebar-menu {
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.menu-group {
+    margin-bottom: 25px;
+    padding: 0 15px;
+}
+
+.menu-label {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #93c5fd;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+}
+
+/* บล็อกแสดงโปรไฟล์ผู้ใช้ */
+.user-profile-box {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 5px;
+}
+
+.user-avatar {
+    font-size: 24px;
+    margin-right: 12px;
+}
+
+.user-info-text strong {
+    display: block;
+    font-size: 15px;
+    color: #ffffff;
+}
+
+.user-info-text span {
+    font-size: 12px;
+    color: #cbd5e1;
+}
+
+/* ลิงก์เมนูระบบ */
+.sidebar-menu a {
+    display: block;
+    padding: 12px 15px;
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    transition: all 0.2s;
+}
+
+.sidebar-menu a:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+}
+
+.sidebar-menu a.active {
+    background: #ffffff;
+    color: #1e3a8a;
+    font-weight: 700;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 20px 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ปุ่มล็อกเอาต์ */
+.btn-logout {
+    width: 100%;
+    padding: 12px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.btn-logout:hover {
+    background: #dc2626;
+}
+
+/* 🏢 พื้นที่แสดงเนื้อหาด้านขวามือ */
+.main-content {
+    flex: 1;
+    background: var(--bg-content);
+    padding: 30px;
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 25px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 20px;
+}
+
+.header-title-area h1 {
+    margin: 0;
+    font-size: 24px;
+    color: var(--text-main);
+    font-weight: 700;
+}
+
+.header-title-area .subtitle {
+    margin: 5px 0 0 0;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.header-status-area {
+    display: flex;
+    gap: 10px;
+}
+
+/* ป้าย Badge */
+.badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.badge-dept {
+    background: #475569;
+    color: white;
+}
+
+.badge-status-online {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+/* 📝 ตัวกล่องการ์ดฟอร์มกรอกข้อมูล */
+.form-container-card {
+    background: var(--bg-card);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    max-width: 800px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 18px;
+    color: var(--text-label);
+    font-weight: 600;
+    font-weight: bold;
+}
+
+.required {
+    color: #ef4444;
+}
+
+/* กล่องกรอกอินพุต */
+.form-group input[type="text"],
+.form-group input[type="datetime-local"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--input-bg);
+    color: var(--text-main);
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.helper-text {
+    display: block;
+    margin-top: 5px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* ปุ่มคำสั่งของฟอร์ม */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-clear {
+    padding: 12px 24px;
+    background: #e2e8f0;
+    color: #475569;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-clear:hover {
+    background: #cbd5e1;
+}
+
+.btn-submit {
+    padding: 12px 24px;
+    background: #1e3a8a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    opacity: 0.9;
+}
+
+/* ===================================================
+   🎨 ชุดธีมสีแยกตามรายแผนก (Department Colors)
+   =================================================== */
+
+/* 📠 แผนกท่อ - PIPE (แดง) */
+.dept-pipe .sidebar { background: #991b1b; }
+.dept-pipe .sidebar-header { background: #991b1b; }
+.dept-pipe .sidebar-menu a.active { color: #991b1b; }
+.dept-pipe .btn-submit { background: #ef4444; }
+.dept-pipe .btn-submit:hover { background: #dc2626; }
+
+/* 💿 แผนกแผ่นหล่อ - SHEET (น้ำเงิน) */
+.dept-sheet .sidebar { background: #1e40af; }
+.dept-sheet .sidebar-header { background: #1e40af; }
+.dept-sheet .sidebar-menu a.active { color: #1e40af; }
+.dept-sheet .btn-submit { background: #3b82f6; }
+.dept-sheet .btn-submit:hover { background: #1E3A8A; }
+
+/* 🎞️ แผนกเทปพัน - TAPE (เขียว) */
+.dept-tape .sidebar { background: #065f46; }
+.dept-tape .sidebar-header { background: #065f46; }
+.dept-tape .sidebar-menu a.active { color: #065f46; }
+.dept-tape .btn-submit { background: #EA580C; }
+.dept-tape .btn-submit:hover { background: #C2410C; }
+
+/* 🎈 แผนกเป่าถุง - BLOW (ม่วง) */
+.dept-blow .sidebar { background: #6b21a8; }
+.dept-blow .sidebar-header { background: #6b21a8; }
+.dept-blow .sidebar-menu a.active { color: #6b21a8; }
+.dept-blow .btn-submit { background: #a855f7; }
+.dept-blow .btn-submit:hover { background: #9333ea; }
+
+/* 📐 แผนกเจาะรู - DRILL (ส้ม) */
+.dept-drill .sidebar { background: #9a3412; }
+.dept-drill .sidebar-header { background: #9a3412; }
+.dept-drill .sidebar-menu a.active { color: #9a3412; }
+.dept-drill .btn-submit { background: #f59e0b; }
+.dept-drill .btn-submit:hover { background: #d97706; }
+
+/* 🗑️ แผนกถุงขยะ - GARBAGE (เทา) */
+.dept-garbage .sidebar { background: #374151; }
+.dept-garbage .sidebar-header { background: #374151; }
+.dept-garbage .sidebar-menu a.active { color: #374151; }
+.dept-garbage .btn-submit { background: #64748b; }
+.dept-garbage .btn-submit:hover { background: #475569; }
+
+/* 💎 แผนกโมโน - MONO (ฟ้า) */
+.dept-mono .sidebar { background: #0e7490; }
+.dept-mono .sidebar-header { background: #0e7490; }
+.dept-mono .sidebar-menu a.active { color: #0e7490; }
+.dept-mono .btn-submit { background: #06b6d4; }
+.dept-mono .btn-submit:hover { background: #EA580C; }
+
+/* Responsive สำหรับมือถือ */
+@media (max-width: 768px) {
+    .app-layout { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; }
+    .main-content { padding: 15px; }
+    .content-header { flex-direction: column; gap: 15px; }
+    .form-actions { justify-content: space-between; }
+    .btn-submit, .btn-clear { flex: 1; text-align: center; }
+}
+
+.btn-back {
+    background: transparent;
+    color: #f59e0b; /* สีส้ม Neon */
+    border: 1px solid #f59e0b;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-back:hover {
+    background: #f59e0b;
+    color: #000000;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+}
+
+main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > input#startDate:nth-of-type(1) {
+  height: 35.4375px;
+}
+
+main:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(1) {
+  color: #0c7fba;
+}
