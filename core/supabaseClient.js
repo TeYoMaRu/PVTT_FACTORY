@@ -22,11 +22,13 @@ function detectEnvironment() {
   const hostname = window.location.hostname;
 
   
-  // localhost หรือ 127.0.0.1 = Development
+  // localhost หรือ 127.0.0.1 หรือ AI Studio Preview = Development
   if (
     hostname === "localhost" ||
     hostname === "127.0.0.1" ||
-    hostname === "ea-factory-2sx.pages.dev"
+    hostname === "ea-factory-2sx.pages.dev" ||
+    hostname.includes("run.app") ||
+    hostname.includes("ai.studio")
   ) {
     return "development";
   }
