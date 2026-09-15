@@ -225,7 +225,7 @@ async function loadAccountingData() {
     const reportPromise = state.supabase
       .from(REPORT_TABLE)
       .select("*")
-      .in("status", [STATUS_SENT, STATUS_DONE, STATUS_CANCELLED])
+      .in("status", [STATUS_SENT, STATUS_DONE, STATUS_CANCELLED, "checked", "done", "approved", "completed", "ตรวจสอบแล้ว"])
       .order("report_date", { ascending: false })
       .order("created_at", { ascending: false });
 
@@ -502,15 +502,31 @@ function applyFilters() {
   renderTable(state.groups);
 }
 
+function normalizeMachineNo(machine, dept) {
+  if (!machine) return "-";
+  const m = String(machine).trim();
+  const d = normalizeDept(dept);
+  if (d === "SHADE_NET") {
+    // แผนกสแลน มีทั้งหมด 18 เครื่อง
+    // จับคู่ สแลน ทอ1, ทอ 1, เครื่อง 1, สแลน 1 -> เครื่อง 1
+    const match = m.match(/(?:สแลน\s*ทอ|ทอ|เครื่อง|สแลน)\s*(\d+)/i);
+    if (match) {
+      return `เครื่อง ${parseInt(match[1], 10)}`;
+    }
+  }
+  return m;
+}
+
 function buildGroups(rows) {
   const m = new Map();
   rows.forEach((r) => {
     const rowStatus = getAccountingStatus(r);
+    const machineNo = normalizeMachineNo(r.machine_no, r.department_code || r.department);
     const key = [
       r.report_date || dateKey(r.created_at),
       normalizeDept(r.department_code || r.department),
       r.shift || r.work_shift || "",
-      r.machine_no || "",
+      machineNo,
       rowStatus || STATUS_SENT,
     ].join("|");
     if (!m.has(key))
@@ -521,7 +537,7 @@ function buildGroups(rows) {
         date: r.report_date || dateKey(r.created_at),
         dept: normalizeDept(r.department_code || r.department),
         shift: r.shift || r.work_shift || "-",
-        machine: r.machine_no || "-",
+        machine: machineNo,
         reporter: new Set(),
         items: [],
         waste: 0,
@@ -582,7 +598,7 @@ function buildMachineStatusGroups(rows) {
         date: r.work_date || dateKey(r.created_at),
         dept: normalizeDept(r.department_code),
         shift: "ทั้งวัน",
-        machine: r.machine_no || "-",
+        machine: normalizeMachineNo(r.machine_no, r.department_code),
         reporter: new Set([r.supervisor_name || "หัวหน้างาน"]),
         items: [],
         waste: 0,
@@ -1183,7 +1199,11 @@ function getProduction(r) {
 }
 
 function getAccountingStatus(r) {
-  return normalizeText(r.accounting_status || r.status || "");
+  const s = normalizeText(r.accounting_status || r.status || "");
+  if (["accounting_checked", "checked", "done", "approved", "completed", "ตรวจสอบแล้ว", "บัญชีตรวจแล้ว"].includes(s)) {
+    return STATUS_DONE;
+  }
+  return s;
 }
 
 

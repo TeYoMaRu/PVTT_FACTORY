@@ -328,8 +328,11 @@ function normalizeDepartmentCode(value) {
     "ตัดเทปน้ำพุง": "RAIN_TAPE_CUT_PUNCH",
 
     shade_net: "SHADE_NET",
+    shading_net: "SHADE_NET",
+    slan: "SHADE_NET",
     "สแลน": "SHADE_NET",
     "ตาข่ายกรองแสง": "SHADE_NET",
+    "แผนกสแลน": "SHADE_NET",
   };
 
   return aliases[key] || text.toUpperCase().replace(/[\s-]+/g, "_");
@@ -511,6 +514,29 @@ async function loadDashboard() {
     ]);
 
     if (currRes.error) throw currRes.error;
+
+    // หากเปิดหน้าแรกแล้วช่วงวันที่ปัจจุบันไม่มีข้อมูล ให้ปรับไปยังเดือนล่าสุดที่มีข้อมูลในระบบโดยอัตโนมัติ
+    if (!window._supervisorAutoAdjusted && (!currRes.data || currRes.data.length === 0) && (!currMachineRes?.data || currMachineRes.data.length === 0)) {
+      window._supervisorAutoAdjusted = true;
+      try {
+        const { data: latestRow } = await supabaseClient
+          .from(REPORT_TABLE)
+          .select("report_date")
+          .order("report_date", { ascending: false })
+          .limit(1);
+
+        if (latestRow && latestRow.length > 0 && latestRow[0].report_date) {
+          const latestDate = new Date(latestRow[0].report_date);
+          const firstDay = new Date(latestDate.getFullYear(), latestDate.getMonth(), 1);
+          const lastDay = new Date(latestDate.getFullYear(), latestDate.getMonth() + 1, 0);
+          setValue("startDate", toDateInputValue(firstDay));
+          setValue("endDate", toDateInputValue(lastDay));
+          return loadDashboard();
+        }
+      } catch (eAuto) {
+        console.warn("Supervisor auto adjust date failed:", eAuto);
+      }
+    }
 
     function mapMachineStatusToRow(m) {
       const isDone = Boolean(

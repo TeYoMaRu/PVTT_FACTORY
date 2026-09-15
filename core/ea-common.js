@@ -62,9 +62,14 @@
     "ตัดและเจาะเทปน้ำพุ่ง": "RAIN_TAPE_CUT_PUNCH",
 
     shade_net: "SHADE_NET",
+    shading_net: "SHADE_NET",
+    slan: "SHADE_NET",
     "สแลน": "SHADE_NET",
     "ตาข่ายกรองแสง": "SHADE_NET",
     "แผนกสแลน": "SHADE_NET",
+    "สแลน (shading_net)": "SHADE_NET",
+    "สแลน (slan)": "SHADE_NET",
+    "สแลน (shade_net)": "SHADE_NET",
   };
 
   const STATUS_LABELS = {

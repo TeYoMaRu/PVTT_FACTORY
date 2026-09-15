@@ -598,6 +598,38 @@ async function loadAndProcessDashboardData() {
 
     if (currRes.error) throw currRes.error;
 
+    // หากเปิดหน้าแรกแล้วเดือนปัจจุบันไม่มีข้อมูล ให้ปรับไปยังเดือนล่าสุดที่มีข้อมูลในระบบโดยอัตโนมัติ
+    if (!window._dashboardAutoAdjusted && (!currRes.data || currRes.data.length === 0) && (!currMachineRes?.data || currMachineRes.data.length === 0)) {
+      window._dashboardAutoAdjusted = true;
+      try {
+        const { data: latestRow } = await client
+          .from(REPORT_TABLE)
+          .select("report_date")
+          .order("report_date", { ascending: false })
+          .limit(1);
+
+        if (latestRow && latestRow.length > 0 && latestRow[0].report_date) {
+          const latestMonthStr = String(latestRow[0].report_date).slice(0, 7);
+          const [ly, lm] = latestMonthStr.split("-");
+          const currentSelectedMonth = document.getElementById("filter-month")?.value;
+          if (latestMonthStr && latestMonthStr !== currentSelectedMonth) {
+            const monthSelect = document.getElementById("filter-month-select");
+            const yearSelect = document.getElementById("filter-year-select");
+            const hiddenInput = document.getElementById("filter-month");
+            if (yearSelect) {
+              populateThaiYearOptions(yearSelect, Number(ly));
+              yearSelect.value = ly;
+            }
+            if (monthSelect) monthSelect.value = lm;
+            if (hiddenInput) hiddenInput.value = `${ly}-${lm}`;
+            return loadAndProcessDashboardData();
+          }
+        }
+      } catch (errAuto) {
+        console.warn("Auto adjust month check failed:", errAuto);
+      }
+    }
+
     // Helper: Map daily_machine_status (เครื่องไม่มีของเสีย) ให้กลายเป็นโครงสร้างรายงาน
     function mapMachineStatusToRow(m) {
       const isDone = Boolean(
@@ -2208,8 +2240,11 @@ function normalizeDepartmentCode(value) {
     "ตัดเทปน้ำพุ่ง": "RAIN_TAPE_CUT_PUNCH",
     "ตัดเทปน้ำพุง": "RAIN_TAPE_CUT_PUNCH",
     shade_net: "SHADE_NET",
+    shading_net: "SHADE_NET",
+    slan: "SHADE_NET",
     "สแลน": "SHADE_NET",
     "ตาข่ายกรองแสง": "SHADE_NET",
+    "แผนกสแลน": "SHADE_NET",
   };
 
   return aliases[key] || text.toUpperCase().replace(/[\s-]+/g, "_");
