@@ -220,35 +220,41 @@ async function loadAccountingData() {
     body.innerHTML = `<tr><td colspan="13" class="empty">กำลังโหลดข้อมูล...</td></tr>`;
 
   try {
-    // โหลดทั้ง "รายการของเสีย" และ "สถานะเครื่องประจำวัน" ที่หัวหน้าส่งบัญชีแล้ว
-    const [reportResult, machineResult] = await Promise.all([
-      state.supabase
-        .from(REPORT_TABLE)
-        .select("*")
-        .in("status", [STATUS_SENT, STATUS_DONE, STATUS_CANCELLED])
-        .order("report_date", { ascending: false })
-        .order("created_at", { ascending: false }),
+    // โหลดทั้ง "รายการของเสีย" และ "สถานะเครื่องประจำวัน" (ถ้ามี)
+    let machineData = [];
+    const reportPromise = state.supabase
+      .from(REPORT_TABLE)
+      .select("*")
+      .in("status", [STATUS_SENT, STATUS_DONE, STATUS_CANCELLED])
+      .order("report_date", { ascending: false })
+      .order("created_at", { ascending: false });
 
-      state.supabase
-        .from(MACHINE_STATUS_TABLE)
-        .select("*")
-        .eq("sent_accounting", true)
-        .in("operation_status", [
-          MACHINE_STATUS_NO_WASTE,
-          MACHINE_STATUS_NOT_RUNNING,
-        ])
-        .order("work_date", { ascending: false }),
-    ]);
+    // ตรวจสอบ cache หรือ query ถ้า table มีอยู่
+    const machinePromise = state.hasMachineStatusTable !== false
+      ? state.supabase
+          .from(MACHINE_STATUS_TABLE)
+          .select("*")
+          .eq("sent_accounting", true)
+          .in("operation_status", [
+            MACHINE_STATUS_NO_WASTE,
+            MACHINE_STATUS_NOT_RUNNING,
+          ])
+          .order("work_date", { ascending: false })
+      : Promise.resolve({ data: [] });
+
+    const [reportResult, machineResult] = await Promise.all([reportPromise, machinePromise]);
 
     if (reportResult.error) throw reportResult.error;
     if (machineResult.error) {
       const msg = String(machineResult.error.message || "");
-      if (machineResult.error.code === "PGRST205" || msg.toLowerCase().includes("daily_machine_status")) {
-        console.warn("Table daily_machine_status not found, fallback to empty.");
-        machineResult.data = [];
+      if (machineResult.error.code === "PGRST205" || machineResult.error.code === "42P01" || msg.toLowerCase().includes("daily_machine_status") || machineResult.error.status === 404) {
+        state.hasMachineStatusTable = false;
+        machineData = [];
       } else {
         throw machineResult.error;
       }
+    } else {
+      machineData = Array.isArray(machineResult.data) ? machineResult.data : [];
     }
 
     state.reports = await attachProblemItems(
@@ -256,9 +262,7 @@ async function loadAccountingData() {
     );
 
     // ไม่โหลด has_waste ซ้ำ เพราะรายการที่มีของเสียมาจาก daily_waste_reports อยู่แล้ว
-    state.machineStatuses = Array.isArray(machineResult.data)
-      ? machineResult.data
-      : [];
+    state.machineStatuses = machineData;
 
     // หากเดือนปัจจุบันที่ระบบตั้งไว้ไม่มีข้อมูล แต่ในระบบมีข้อมูลเดือนอื่น ให้ปรับตัวเลือกเดือนไปยังเดือนล่าสุดที่มีข้อมูล
     adjustMonthToAvailableData();

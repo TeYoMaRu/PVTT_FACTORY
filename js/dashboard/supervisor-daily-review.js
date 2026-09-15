@@ -775,22 +775,23 @@ async function loadMachineDailyCheck(reportRows, date) {
 
     // โหลดสถานะที่หัวหน้ายืนยันไว้แล้วของวันที่เลือก
     let statusData = [];
-    const { data: fetchedData, error: statusError } = await state.supabase
-      .from(MACHINE_STATUS_TABLE)
-      .select("*")
-      .eq("work_date", date);
+    if (state.hasMachineStatusTable !== false) {
+      const { data: fetchedData, error: statusError } = await state.supabase
+        .from(MACHINE_STATUS_TABLE)
+        .select("*")
+        .eq("work_date", date);
 
-    if (statusError) {
-      // ถ้ายังไม่ได้สร้าง table ให้ fallback เป็น [] เพื่อไม่ให้แอปพัง
-      const msg = String(statusError.message || "");
-      if (statusError.code === "PGRST205" || msg.toLowerCase().includes("daily_machine_status")) {
-        console.warn("Table daily_machine_status not found, fallback to empty.");
-        statusData = [];
+      if (statusError) {
+        const msg = String(statusError.message || "");
+        if (statusError.code === "PGRST205" || statusError.code === "42P01" || msg.toLowerCase().includes("daily_machine_status") || statusError.status === 404) {
+          state.hasMachineStatusTable = false;
+          statusData = [];
+        } else {
+          throw statusError;
+        }
       } else {
-        throw statusError;
+        statusData = fetchedData || [];
       }
-    } else {
-      statusData = fetchedData || [];
     }
 
     let statuses = Array.isArray(statusData) ? statusData : [];
