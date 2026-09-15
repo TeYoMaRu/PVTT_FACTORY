@@ -24,7 +24,13 @@ const MACHINE_WARNING_PERCENT = 0.7;
 const FACTORY_LIMIT_PERCENT = 1;
 const FACTORY_WARNING_PERCENT = 0.7;
 
-const ALLOWED_ROLES = ["admin", "management", "manager", "executive"];
+const ALLOWED_ROLES = [
+  "admin",
+  "management",
+  "manager",
+  "executive",
+  "accounting",
+];
 const ACCOUNTING_CHECKED_STATUS = [
   "accounting_checked",
   "checked",

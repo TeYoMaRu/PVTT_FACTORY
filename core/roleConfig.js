@@ -163,9 +163,12 @@ function isManagement(role) {
 function canApprove(role) {
   const currentRole = normalizeRole(role);
 
-  return [ROLES.ADMIN, ROLES.MANAGEMENT, ROLES.SUPERVISOR].includes(
-    currentRole,
-  );
+  return [
+    ROLES.ADMIN,
+    ROLES.MANAGEMENT,
+    ROLES.SUPERVISOR,
+    ROLES.ACCOUNTING,
+  ].includes(currentRole);
 }
 
 /**
@@ -198,13 +201,18 @@ function canManageCost(role) {
 /**
  * 🎯 กลุ่มกรอกข้อมูลของเสีย
  *
- * admin / supervisor / staff สามารถกรอกได้
+ * admin / supervisor / staff / accounting สามารถกรอกได้
  * แต่แผนกจะถูกล็อกจาก activeDept หรือ QR
  */
 function canCreateWasteReport(role) {
   const currentRole = normalizeRole(role);
 
-  return [ROLES.ADMIN, ROLES.SUPERVISOR, ROLES.STAFF].includes(currentRole);
+  return [
+    ROLES.ADMIN,
+    ROLES.SUPERVISOR,
+    ROLES.STAFF,
+    ROLES.ACCOUNTING,
+  ].includes(currentRole);
 }
 
 /**

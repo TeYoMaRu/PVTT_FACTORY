@@ -370,6 +370,8 @@ async function prepareFormAuthContext() {
       "admin",
       "supervisor",
       "staff",
+      "accounting",
+      "management",
     ]);
 
     if (!profile) return false;

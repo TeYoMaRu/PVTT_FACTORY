@@ -195,16 +195,28 @@
       ======================================================= -->
       <aside class="sidebar">
         <div class="sidebar-logo">
-          <div class="logo-icon">
-            <img src="/icons/Logo_Apps3.png?v=3" alt="PVT&T FACTORY Logo" />
-          </div>
+          <a href="/index.html" title="กลับสู่หน้าหลัก (Index)" style="text-decoration: none; display: flex; flex-direction: column; align-items: center;">
+            <div class="logo-icon">
+              <img src="/icons/Logo_Apps3.png?v=3" alt="PVT&T FACTORY Logo" />
+            </div>
 
-          <div class="logo-text">
-            <small>Admin Console</small>
-          </div>
+            <div class="logo-text">
+              <small>Admin Console</small>
+            </div>
+          </a>
         </div>
 
         <nav class="sidebar-menu" aria-label="เมนูหลัก">
+          <a
+            class="sidebar-item"
+            href="/index.html"
+            title="ทางลัดไปหน้าหลัก (Index)"
+            style="text-decoration: none; display: flex; align-items: center; gap: 10px; background: rgba(30, 58, 138, 0.25); border: 1px solid rgba(59, 130, 246, 0.35); color: #93c5fd; margin-bottom: 6px;"
+          >
+            <span class="material-symbols-outlined">home</span>
+            <span class="sidebar-item-text">หน้าหลัก (Index)</span>
+          </a>
+
           <span class="sidebar-section-label">ภาพรวม</span>
           <button
             class="sidebar-item active"
@@ -276,6 +288,16 @@
           </div>
 
           <div class="workspace-actions">
+            <a
+              href="/index.html"
+              class="btn"
+              style="background: #1E3A8A; color: #ffffff; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 12px; font-weight: 700; font-size: 14px; box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);"
+              title="ทางลัดไปหน้าหลัก Dashboard สรุปภาพรวมของเสีย"
+            >
+              <span class="material-symbols-outlined">home</span>
+              <span>หน้าหลัก (Index)</span>
+            </a>
+
             <button class="btn btn-secondary" type="button" id="btn-refresh">
               <span class="material-symbols-outlined">refresh</span>
               โหลดข้อมูลใหม่

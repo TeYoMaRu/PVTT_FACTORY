@@ -23,10 +23,17 @@ const USER_DEPARTMENT_TABLE = "user_departments";
 const ITEM_TABLE = "daily_waste_report_items";
 
 // Role ที่เข้า Dashboard ได้
-const ALLOW_ROLES = ["admin", "management", "executive", "supervisor", "manager"];
+const ALLOW_ROLES = [
+  "admin",
+  "management",
+  "executive",
+  "supervisor",
+  "manager",
+  "accounting",
+];
 
 // Role ที่เห็นข้อมูลทุกแผนก
-const SEE_ALL_ROLES = ["admin", "management", "executive"];
+const SEE_ALL_ROLES = ["admin", "management", "executive", "accounting"];
 
 // Mapping ชื่อสถานะให้แสดงเป็นภาษาไทย
 const STATUS_LABELS = {

@@ -89,9 +89,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    // อนุญาตทั้งผู้ที่มี Role = admin หรือมีสถานะ is_system_owner = true
+    // อนุญาตทั้งผู้ที่มี Role = admin, accounting หรือมีสถานะ is_system_owner = true
     const role = String(profile.role || "").toLowerCase().trim();
-    if (role !== "admin" && !profile?.is_system_owner) {
+    if (role !== "admin" && role !== "accounting" && !profile?.is_system_owner) {
       alert("คุณไม่มีสิทธิ์เข้าใช้งานหน้า Admin Panel");
       window.location.replace(LOGIN_PAGE);
       return;
@@ -380,7 +380,7 @@ async function loadAll(showLoading = false) {
       }
 
       const role = String(profile.role || "").toLowerCase().trim();
-      if (role !== "admin" && !profile?.is_system_owner) {
+      if (role !== "admin" && role !== "accounting" && !profile?.is_system_owner) {
         console.warn("Unauthorized role on loadAll, redirecting to login...");
         window.location.replace(LOGIN_PAGE);
         return;
